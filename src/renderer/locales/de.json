@@ -256,7 +256,9 @@
     "selectedCK3FolderTitle": "Ausgewählter CK3-Dokumentpfad",
     "selectCK3UserFolderTitle": "Wählen Sie den Ordner „CK3-Dokumente“ aus",
     "allowPrerelease": "Vorabversionen erhalten",
-    "allowPrereleaseHelp": "Wenn aktiviert, erhalten Sie Beta- und Vorabversionen. Diese können weniger stabil sein, enthalten jedoch die neuesten Funktionen."
+    "allowPrereleaseHelp": "Wenn aktiviert, erhalten Sie Beta- und Vorabversionen. Diese können weniger stabil sein, enthalten jedoch die neuesten Funktionen.",
+    "egline": "z.B.",
+    "ck3UserFolderClickToSelect": "Klicken zum Auswählen"
   },
   "summaries": {
     "aboutSummaryGeneration": "Über Zusammenfassungsgenerierung",

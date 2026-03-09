@@ -8,7 +8,7 @@ import ModelSelector from './ModelSelector';
 import ContextLengthField from './ContextLengthField';
 import FormGroupInput from './FormGroupInput';
 import Tooltip from './Tooltip';
-import { OpenRouterConfigFieldsComponent, OpenAICompatibleConfigFieldsComponent, OllamaConfigFieldsComponent, DeepseekConfigFieldsComponent } from './ConfigFields';
+import { OpenRouterConfigFieldsComponent, OpenAICompatibleConfigFieldsComponent, OllamaConfigFieldsComponent, DeepseekConfigFieldsComponent, GeminiConfigFieldsComponent } from './ConfigFields';
 
 const Player2OpenAppButton: React.FC = () => {
   const { t } = useTranslation();
@@ -160,6 +160,7 @@ const ProviderFieldComponents: Record<string, React.FC<CommonFieldProps>> = {
   'openai-compatible': OpenAICompatibleConfigFieldsComponent,
   ollama: OllamaConfigFieldsComponent,
   deepseek: DeepseekConfigFieldsComponent,
+  gemini: GeminiConfigFieldsComponent,
 };
 
 interface ProviderConfigPanelProps {
@@ -227,7 +228,7 @@ const ProviderConfigPanel: React.FC<ProviderConfigPanelProps> = (props) => {
             <span className="selected-path">{appSettings.ck3UserFolderPath}</span>
           ) : (
             <span className="example-path-text">
-              C:\Users\<span className="example-highlight">{t('settings.ck3UserFolderExample')}</span>\Documents\Paradox Interactive\Crusader Kings III
+             <span className="example-highlight">{t('settings.egline')}</span> C:\Users\<span className="example-highlight">{t('settings.ck3UserFolderExample')}</span>\Documents\Paradox Interactive\Crusader Kings III <span className="example-highlight" style={{fontStyle: 'italic'}}>({t('settings.ck3UserFolderClickToSelect')})</span>
             </span>
           )}
         </div>

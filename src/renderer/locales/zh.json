@@ -256,7 +256,9 @@
     "selectedCK3FolderTitle": "已选择的 CK3 文档路径",
     "selectCK3UserFolderTitle": "选择 CK3 文档文件夹",
     "allowPrerelease": "接收测试版更新",
-    "allowPrereleaseHelp": "启用后，您将收到测试版和预发布版本。这些版本可能不太稳定，但包含最新功能。"
+    "allowPrereleaseHelp": "启用后，您将收到测试版和预发布版本。这些版本可能不太稳定，但包含最新功能。",
+    "egline": "如：",
+    "ck3UserFolderClickToSelect": "点击以选择"
   },
   "summaries": {
     "aboutSummaryGeneration": "关于摘要生成",

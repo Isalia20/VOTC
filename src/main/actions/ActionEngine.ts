@@ -224,8 +224,9 @@ export class ActionEngine {
           continue;
         }
 
-        const isDestructive = (loaded.definition as any).isDestructive || false;
-        console.log(`[ActionEngine] Action ${inv.actionId} isDestructive property: ${(loaded.definition as any).isDestructive}, computed: ${isDestructive}`);
+        //FIX: Use getEffectiveDestructive to respect user overrides
+        const isDestructive = actionRegistry.getEffectiveDestructive(inv.actionId);
+        console.log(`[ActionEngine] Action ${inv.actionId} isDestructive: ${isDestructive}, hasOverride: ${actionRegistry.hasDestructiveOverride(inv.actionId)}`);
         
         // Determine if this action needs approval
         let needsUserApproval = false;

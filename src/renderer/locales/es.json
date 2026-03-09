@@ -256,7 +256,9 @@
     "selectedCK3FolderTitle": "Ruta de documentos CK3 seleccionados",
     "selectCK3UserFolderTitle": "Seleccione la carpeta de documentos CK3",
     "allowPrerelease": "Recibir actualizaciones preliminares",
-    "allowPrereleaseHelp": "Cuando está habilitado, recibirá versiones beta y preliminares. Pueden ser menos estables pero incluyen las últimas funciones."
+    "allowPrereleaseHelp": "Cuando está habilitado, recibirá versiones beta y preliminares. Pueden ser menos estables pero incluyen las últimas funciones.",
+    "egline": "p. ej.",
+    "ck3UserFolderClickToSelect": "haz clic para seleccionar"
   },
   "summaries": {
     "aboutSummaryGeneration": "Acerca de la generación de resúmenes",

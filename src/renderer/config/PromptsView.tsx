@@ -336,8 +336,6 @@ const PromptsView: React.FC = () => {
       <div
         key={block.id}
         className={`prompt-block ${block.enabled ? '' : 'disabled'} ${draggingId === block.id ? 'dragging' : ''}`}
-        draggable
-        onDragStart={() => setDraggingId(block.id)}
         onDragOver={(e) => {
           e.preventDefault();
           if (draggingId && draggingId !== block.id) {
@@ -346,7 +344,11 @@ const PromptsView: React.FC = () => {
         }}
         onDragEnd={() => setDraggingId(null)}
       >
-        <div className="block-header">
+        <div
+          className="block-header"
+          draggable
+          onDragStart={() => setDraggingId(block.id)}
+        >
           <div className="block-title">
             <span className="drag-handle">↕</span>
             <strong>{index + 1}. {block.label}</strong>

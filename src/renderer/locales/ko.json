@@ -256,7 +256,9 @@
     "selectedCK3FolderTitle": "선택한 CK3 문서 경로",
     "selectCK3UserFolderTitle": "CK3 문서 폴더 선택",
     "allowPrerelease": "시험판 업데이트 받기",
-    "allowPrereleaseHelp": "활성화하면 베타 및 시험판 버전을 받게 됩니다. 안정성이 떨어질 수 있지만 최신 기능이 포함되어 있습니다."
+    "allowPrereleaseHelp": "활성화하면 베타 및 시험판 버전을 받게 됩니다. 안정성이 떨어질 수 있지만 최신 기능이 포함되어 있습니다.",
+    "egline": "예:",
+    "ck3UserFolderClickToSelect": "클릭하여 선택"
   },
   "summaries": {
     "aboutSummaryGeneration": "요약 생성 정보",
