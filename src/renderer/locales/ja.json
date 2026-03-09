@@ -256,7 +256,9 @@
     "selectedCK3FolderTitle": "選択した CK3 ドキュメントのパス",
     "selectCK3UserFolderTitle": "CK3ドキュメントフォルダーを選択します",
     "allowPrerelease": "プレリリースアップデートを受け取る",
-    "allowPrereleaseHelp": "有効にすると、ベータ版とプレリリース版を受け取ります。これらは安定性が低い可能性がありますが、最新の機能が含まれています。"
+    "allowPrereleaseHelp": "有効にすると、ベータ版とプレリリース版を受け取ります。これらは安定性が低い可能性がありますが、最新の機能が含まれています。",
+    "egline": "例：",
+    "ck3UserFolderClickToSelect": "クリックして選択"
   },
   "summaries": {
     "aboutSummaryGeneration": "要約生成について",

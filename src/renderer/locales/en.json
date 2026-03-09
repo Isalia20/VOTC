@@ -258,7 +258,9 @@
     "selectedCK3FolderTitle": "Selected CK3 Documents Path",
     "selectCK3UserFolderTitle": "Select CK3 Documents Folder",
     "allowPrerelease": "Receive Pre-release Updates",
-    "allowPrereleaseHelp": "When enabled, you will receive beta and pre-release versions. These may be less stable but include the latest features."
+    "allowPrereleaseHelp": "When enabled, you will receive beta and pre-release versions. These may be less stable but include the latest features.",
+    "egline": "e.g.",
+    "ck3UserFolderClickToSelect": "click to select"
   },
   "summaries": {
     "aboutSummaryGeneration": "About Summary Generation",
