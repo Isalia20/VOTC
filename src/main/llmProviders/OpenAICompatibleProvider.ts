@@ -109,17 +109,22 @@ export class OpenAICompatibleProvider extends BaseProvider {
       maxRetries: 0,
     });
 
+    // Transform json_schema to json_object + prompt injection for providers
+    // that don't natively support OpenAI's json_schema structured output
+    // (e.g., Claude, Kimi, and other OpenAI-compatible APIs)
+    const transformedRequest = this.transformJsonSchemaToPromptInjection(request);
+
     const requestParams: OpenAI.Chat.Completions.ChatCompletionCreateParams = {
-      model: request.model,
-      messages: request.messages as OpenAI.Chat.Completions.ChatCompletionMessageParam[],
-      stream: request.stream,
-      temperature: request.temperature,
-      max_tokens: request.max_tokens,
-      top_p: request.top_p,
-      presence_penalty: request.presence_penalty,
-      frequency_penalty: request.frequency_penalty,
-      ...(request.response_format ? { response_format: request.response_format as any } : {}),
-      ...(request.stream ? { stream_options: { include_usage: true } } : {}),
+      model: transformedRequest.model,
+      messages: transformedRequest.messages as OpenAI.Chat.Completions.ChatCompletionMessageParam[],
+      stream: transformedRequest.stream,
+      temperature: transformedRequest.temperature,
+      max_tokens: transformedRequest.max_tokens,
+      top_p: transformedRequest.top_p,
+      presence_penalty: transformedRequest.presence_penalty,
+      frequency_penalty: transformedRequest.frequency_penalty,
+      ...(transformedRequest.response_format ? { response_format: transformedRequest.response_format as any } : {}),
+      ...(transformedRequest.stream ? { stream_options: { include_usage: true } } : {}),
     };
 
     if (requestParams.stream) {

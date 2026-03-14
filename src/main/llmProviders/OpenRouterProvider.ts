@@ -87,16 +87,21 @@ export class OpenRouterProvider extends BaseProvider {
         },
       });
   
+      // Transform json_schema to json_object + prompt injection for models
+      // that don't natively support OpenAI's json_schema structured output
+      // (e.g., Claude, Gemini, and other non-OpenAI models on OpenRouter)
+      const transformedRequest = this.transformJsonSchemaToPromptInjection(request);
+
       const requestParams = {
-        model: request.model,
-        messages: request.messages as OpenAI.Chat.Completions.ChatCompletionMessageParam[],
-        stream: request.stream,
-        temperature: request.temperature,
-        max_tokens: request.max_tokens,
-        top_p: request.top_p,
-        presence_penalty: request.presence_penalty,
-        frequency_penalty: request.frequency_penalty,
-        ...(request.response_format ? { response_format: request.response_format as any } : {}),
+        model: transformedRequest.model,
+        messages: transformedRequest.messages as OpenAI.Chat.Completions.ChatCompletionMessageParam[],
+        stream: transformedRequest.stream,
+        temperature: transformedRequest.temperature,
+        max_tokens: transformedRequest.max_tokens,
+        top_p: transformedRequest.top_p,
+        presence_penalty: transformedRequest.presence_penalty,
+        frequency_penalty: transformedRequest.frequency_penalty,
+        ...(transformedRequest.response_format ? { response_format: transformedRequest.response_format as any } : {}),
         // OpenRouter-specific: exclude reasoning/thinking tokens from the response
         reasoning: {
           exclude: true,

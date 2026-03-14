@@ -144,6 +144,135 @@ export abstract class BaseProvider {
    * @param shouldRetry Function to determine if error is retryable (default: always retry)
    * @returns Promise resolving to operation result
    */
+  /**
+   * Transform a json_schema response_format into json_object + prompt injection.
+   * This is needed for providers that don't natively support json_schema
+   * (e.g., DeepSeek, Claude via OpenRouter/OpenAI-compatible, Kimi, etc.)
+   *
+   * The schema description is injected into the last system message so the model
+   * follows the expected structure via instruction-following.
+   */
+  protected transformJsonSchemaToPromptInjection(request: ILLMCompletionRequest): ILLMCompletionRequest {
+    if (request.response_format?.type !== 'json_schema' || !request.response_format.json_schema) {
+      return request;
+    }
+
+    const transformed = { ...request };
+    const jsonSchemaObj = request.response_format.json_schema;
+    const schemaName = jsonSchemaObj.name || 'response';
+    const schemaObj = jsonSchemaObj.schema;
+
+    // Convert json_schema to json_object and inject schema into the system prompt
+    transformed.response_format = { type: 'json_object' };
+
+    // Build human-readable schema description
+    const schemaDescription = this.buildSchemaDescription(schemaName, schemaObj);
+
+    // Find the last system message and append schema info, or add a new system message
+    const messages = [...request.messages];
+    let schemaInjected = false;
+
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].role === 'system') {
+        messages[i] = {
+          ...messages[i],
+          content: messages[i].content + '\n\n' + schemaDescription
+        };
+        schemaInjected = true;
+        break;
+      }
+    }
+
+    if (!schemaInjected) {
+      messages.unshift({
+        role: 'system',
+        content: schemaDescription
+      });
+    }
+
+    transformed.messages = messages;
+    return transformed;
+  }
+
+  /**
+   * Build a human-readable schema description for prompt injection
+   */
+  private buildSchemaDescription(schemaName: string, schema: any): string {
+    let description = `You MUST respond with valid JSON matching this schema:\n`;
+    description += `Schema name: ${schemaName}\n`;
+
+    if (schema.properties) {
+      description += this.describeObjectSchema(schema, 0);
+    }
+
+    description += `\nIMPORTANT: Your response must be ONLY valid JSON. No prose, no code fences, no explanations.`;
+
+    return description;
+  }
+
+  /**
+   * Recursively describe an object schema
+   */
+  private describeObjectSchema(schema: any, indent: number): string {
+    const spaces = '  '.repeat(indent);
+    let result = '';
+
+    if (schema.type === 'object' && schema.properties) {
+      const required = schema.required || [];
+
+      for (const [key, value] of Object.entries(schema.properties)) {
+        const isRequired = required.includes(key);
+        const reqMarker = isRequired ? ' (required)' : ' (optional)';
+
+        if ((value as any).type === 'array') {
+          const items = (value as any).items;
+          if ((items as any).anyOf) {
+            result += `${spaces}- ${key}: array of objects${reqMarker}\n`;
+            result += this.describeAnyOfSchema(items, indent + 1);
+          } else if ((items as any).type === 'object') {
+            result += `${spaces}- ${key}: array of objects${reqMarker}\n`;
+            result += this.describeObjectSchema(items, indent + 1);
+          } else {
+            result += `${spaces}- ${key}: array of ${(items as any).type}${reqMarker}\n`;
+          }
+        } else if ((value as any).type === 'object') {
+          result += `${spaces}- ${key}: object${reqMarker}\n`;
+          result += this.describeObjectSchema(value, indent + 1);
+        } else if ((value as any).anyOf) {
+          result += `${spaces}- ${key}: ${(value as any).anyOf.map((t: any) => t.type).join(' | ')}${reqMarker}\n`;
+        } else if ((value as any).const !== undefined) {
+          result += `${spaces}- ${key}: "${(value as any).const}" (constant)${reqMarker}\n`;
+        } else if ((value as any).enum) {
+          result += `${spaces}- ${key}: enum{${(value as any).enum.join(', ')}}${reqMarker}\n`;
+        } else {
+          result += `${spaces}- ${key}: ${(value as any).type}${reqMarker}\n`;
+        }
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Describe an anyOf schema (used for action variants)
+   */
+  private describeAnyOfSchema(schema: any, indent: number): string {
+    const spaces = '  '.repeat(indent);
+    let result = '';
+
+    if (schema.anyOf) {
+      schema.anyOf.forEach((variant: any, index: number) => {
+        if (variant.properties?.actionId?.const) {
+          const actionId = variant.properties.actionId.const;
+          result += `${spaces}Variant ${index + 1} (actionId: "${actionId}"):\n`;
+          result += this.describeObjectSchema(variant, indent + 1);
+        }
+      });
+    }
+
+    return result;
+  }
+
   protected async retryWithBackoff<T>(
     operation: () => Promise<T>,
     maxRetries: number = 3,
